@@ -1,0 +1,8 @@
+C:\Git\UiAutomation\UiAutomation.Logic\obj\Debug\UiAutomation.Logic.csprojResolveAssemblyReference.cache
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Debug\UiAutomation.Logic.dll.config
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Debug\UiAutomation.Logic.dll
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Debug\UiAutomation.Logic.pdb
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Debug\Newtonsoft.Json.dll
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Debug\Newtonsoft.Json.xml
+C:\Git\UiAutomation\UiAutomation.Logic\obj\Debug\UiAutomation.Logic.dll
+C:\Git\UiAutomation\UiAutomation.Logic\obj\Debug\UiAutomation.Logic.pdb

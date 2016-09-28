@@ -1,0 +1,13 @@
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\RobotAPISampleTests.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\RobotAPISampleTests.pdb
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\RobotAPISample.exe
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\Newtonsoft.Json.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\Interop.WFICALib.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\stdole.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\RobotAPISample.pdb
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\Newtonsoft.Json.xml
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\obj\Debug\RobotAPISampleTests.csprojResolveAssemblyReference.cache
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\obj\Debug\RobotAPISampleTests.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\obj\Debug\RobotAPISampleTests.pdb
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISampleTests\bin\Debug\RobotAPISampleTests.dll.config

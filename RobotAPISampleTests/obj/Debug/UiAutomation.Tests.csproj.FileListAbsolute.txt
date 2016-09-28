@@ -1,0 +1,11 @@
+C:\Git\UiAutomation\RobotAPISampleTests\bin\Debug\RobotAPISampleTests.dll.config
+C:\Git\UiAutomation\RobotAPISampleTests\bin\Debug\RobotAPISampleTests.dll
+C:\Git\UiAutomation\RobotAPISampleTests\bin\Debug\RobotAPISampleTests.pdb
+C:\Git\UiAutomation\RobotAPISampleTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Git\UiAutomation\RobotAPISampleTests\bin\Debug\Newtonsoft.Json.dll
+C:\Git\UiAutomation\RobotAPISampleTests\bin\Debug\Newtonsoft.Json.xml
+C:\Git\UiAutomation\RobotAPISampleTests\obj\Debug\UiAutomation.Tests.csprojResolveAssemblyReference.cache
+C:\Git\UiAutomation\RobotAPISampleTests\obj\Debug\RobotAPISampleTests.dll
+C:\Git\UiAutomation\RobotAPISampleTests\obj\Debug\RobotAPISampleTests.pdb
+C:\Git\UiAutomation\RobotAPISampleTests\bin\Debug\UiAutomation.Logic.dll
+C:\Git\UiAutomation\RobotAPISampleTests\bin\Debug\UiAutomation.Logic.pdb
