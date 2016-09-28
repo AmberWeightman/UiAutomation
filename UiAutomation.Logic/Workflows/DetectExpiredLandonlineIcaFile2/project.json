@@ -1,0 +1,12 @@
+{
+  "description": "Simple Process Project",
+  "version": "2016.1.6099.16285",
+  "main": "Main.xaml",
+  "id": "DetectExpiredLandonlineIcaFile2",
+  "dependencies": {},
+  "configurationOptions": {},
+  "excludedData": [
+    "Private:*",
+    "*password*"
+  ]
+}

@@ -1,0 +1,8 @@
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\Debug\RobotAPISample.exe.config
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\obj\Debug\RobotAPISample.csprojResolveAssemblyReference.cache
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\Debug\RobotAPISample.exe
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\Debug\RobotAPISample.pdb
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\Debug\Newtonsoft.Json.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\Debug\Newtonsoft.Json.xml
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\obj\Debug\RobotAPISample.exe
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\obj\Debug\RobotAPISample.pdb

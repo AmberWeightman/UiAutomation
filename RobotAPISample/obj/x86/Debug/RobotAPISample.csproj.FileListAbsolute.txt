@@ -1,0 +1,11 @@
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\x86\Debug\RobotAPISample.exe.config
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\x86\Debug\RobotAPISample.exe
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\x86\Debug\RobotAPISample.pdb
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\x86\Debug\Newtonsoft.Json.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\x86\Debug\Newtonsoft.Json.xml
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\bin\x86\Debug\Interop.WFICALib.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\obj\x86\Debug\Interop.WFICALib.dll
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\obj\x86\Debug\RobotAPISample.csproj.ResolveComReference.cache
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\obj\x86\Debug\RobotAPISample.exe
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\obj\x86\Debug\RobotAPISample.pdb
+C:\Git\UiPathSDK\Code Samples\Robot API\RobotAPISample\obj\x86\Debug\RobotAPISample.csprojResolveAssemblyReference.cache

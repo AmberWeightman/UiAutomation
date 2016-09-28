@@ -1,0 +1,225 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="Main_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:p="http://schemas.uipath.com/workflow/activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Framework.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Core</AssemblyReference>
+      <AssemblyReference>UiPath.Framework.Activities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Recording Sequence">
+    <p:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" Window="{x:Null}" DisplayName="Attach Window ' Page'" InformativeScreenshot="449f5712306b9b760bc9b8db136e6e13" Selector="&lt;html app='chrome.exe' /&gt;">
+      <p:WindowScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do">
+            <p:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'client Subject,'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+              <p:Click.CursorPosition>
+                <p:CursorPosition OffsetX="14" OffsetY="13" Position="TopLeft" />
+              </p:Click.CursorPosition>
+              <p:Click.Target>
+                <p:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="55ed06a7b4b10335b340650082b033cf" Selector="&lt;ctrl name='Select a certificate' role='dialog' /&gt;&lt;ctrl name='Subject, jcunningham004, Issuer, Landonline CA, Serial, 4D0A7F02' role='client' /&gt;" WaitForReady="INTERACTIVE" />
+              </p:Click.Target>
+              <sap2010:WorkflowViewState.IdRef>Click_6</sap2010:WorkflowViewState.IdRef>
+            </p:Click>
+            <p:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'text  OK'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+              <p:Click.CursorPosition>
+                <p:CursorPosition OffsetX="9" OffsetY="18" Position="TopLeft" />
+              </p:Click.CursorPosition>
+              <p:Click.Target>
+                <p:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="cc51b09316eec34ce106f109ca393197" Selector="&lt;ctrl name='Select a certificate' role='dialog' /&gt;&lt;ctrl name='OK' role='push button' /&gt;&lt;ctrl name='OK' role='text' /&gt;" WaitForReady="INTERACTIVE" />
+              </p:Click.Target>
+              <sap2010:WorkflowViewState.IdRef>Click_7</sap2010:WorkflowViewState.IdRef>
+            </p:Click>
+            <p:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'INPUT'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+              <p:Click.CursorPosition>
+                <p:CursorPosition OffsetX="21" OffsetY="12" Position="TopLeft" />
+              </p:Click.CursorPosition>
+              <p:Click.Target>
+                <p:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c56b0893a4aa0ee506373a38fa01c2fc" Selector="&lt;webctrl name='submit1' tag='INPUT' /&gt;" WaitForReady="COMPLETE" />
+              </p:Click.Target>
+              <sap2010:WorkflowViewState.IdRef>Click_8</sap2010:WorkflowViewState.IdRef>
+            </p:Click>
+            <p:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'IMG'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+              <p:Click.CursorPosition>
+                <p:CursorPosition OffsetX="15" OffsetY="21" Position="TopLeft" />
+              </p:Click.CursorPosition>
+              <p:Click.Target>
+                <p:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8e29e96c199eff56dcd7de76f152f362" Selector="&lt;webctrl parentid='AutoApp' tag='IMG' /&gt;" WaitForReady="COMPLETE" />
+              </p:Click.Target>
+              <sap2010:WorkflowViewState.IdRef>Click_9</sap2010:WorkflowViewState.IdRef>
+            </p:Click>
+            <p:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'IMG'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+              <p:Click.CursorPosition>
+                <p:CursorPosition OffsetX="18" OffsetY="18" Position="TopLeft" />
+              </p:Click.CursorPosition>
+              <p:Click.Target>
+                <p:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8e29e96c199eff56dcd7de76f152f362" Selector="&lt;webctrl parentid='AutoApp' tag='IMG' /&gt;" WaitForReady="COMPLETE" />
+              </p:Click.Target>
+              <sap2010:WorkflowViewState.IdRef>Click_10</sap2010:WorkflowViewState.IdRef>
+            </p:Click>
+            <p:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'IMG'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+              <p:Click.CursorPosition>
+                <p:CursorPosition OffsetX="17" OffsetY="20" Position="TopLeft" />
+              </p:Click.CursorPosition>
+              <p:Click.Target>
+                <p:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8e29e96c199eff56dcd7de76f152f362" Selector="&lt;webctrl parentid='AutoApp' tag='IMG' /&gt;" WaitForReady="COMPLETE" />
+              </p:Click.Target>
+              <sap2010:WorkflowViewState.IdRef>Click_11</sap2010:WorkflowViewState.IdRef>
+            </p:Click>
+            <p:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'IMG'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+              <p:Click.CursorPosition>
+                <p:CursorPosition OffsetX="15" OffsetY="20" Position="TopLeft" />
+              </p:Click.CursorPosition>
+              <p:Click.Target>
+                <p:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8e29e96c199eff56dcd7de76f152f362" Selector="&lt;webctrl parentid='AutoApp' tag='IMG' /&gt;" WaitForReady="COMPLETE" />
+              </p:Click.Target>
+              <sap2010:WorkflowViewState.IdRef>Click_12</sap2010:WorkflowViewState.IdRef>
+            </p:Click>
+            <sap2010:WorkflowViewState.IdRef>Sequence_7</sap2010:WorkflowViewState.IdRef>
+          </Sequence>
+        </ActivityAction>
+      </p:WindowScope.Body>
+      <sap2010:WorkflowViewState.IdRef>WindowScope_4</sap2010:WorkflowViewState.IdRef>
+    </p:WindowScope>
+    <p:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" Window="{x:Null}" DisplayName="Attach Window 'CitrixAcc Page'" InformativeScreenshot="4ad90ab6b9ba9873deabda9d80725e3e" Selector="&lt;html app='chrome.exe' title='Citrix Access Platform' /&gt;&lt;wnd cls='Intermediate D3D Window' /&gt;">
+      <p:WindowScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do">
+            <p:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'chrome.exe'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+              <p:Click.CursorPosition>
+                <p:CursorPosition OffsetX="36" OffsetY="1866" Position="TopLeft" />
+              </p:Click.CursorPosition>
+              <p:Click.Target>
+                <p:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="819e06bb416aacb567df705b34d4f295" WaitForReady="INTERACTIVE" />
+              </p:Click.Target>
+              <sap2010:WorkflowViewState.IdRef>Click_13</sap2010:WorkflowViewState.IdRef>
+            </p:Click>
+            <sap2010:WorkflowViewState.IdRef>Sequence_8</sap2010:WorkflowViewState.IdRef>
+          </Sequence>
+        </ActivityAction>
+      </p:WindowScope.Body>
+      <sap2010:WorkflowViewState.IdRef>WindowScope_5</sap2010:WorkflowViewState.IdRef>
+    </p:WindowScope>
+    <p:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" Window="{x:Null}" DisplayName="Attach Window 'CitrixRec Dialog'" InformativeScreenshot="5c00ee5c23f65d6d4802681ac7181a48" Selector="&lt;wnd app='wfica32.exe' cls='#32770' title='Citrix Receiver - Security Warning' /&gt;">
+      <p:WindowScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do">
+            <p:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Button'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+              <p:Click.CursorPosition>
+                <p:CursorPosition OffsetX="121" OffsetY="22" Position="TopLeft" />
+              </p:Click.CursorPosition>
+              <p:Click.Target>
+                <p:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="eabd796386ba4ebc8d45173d1d4042d2" Selector="&lt;wnd aaname='Citrix Receiver - Security Warning' cls='DirectUIHWND' /&gt;&lt;wnd aaname='Permit all access' cls='Button' title='&amp;amp;Permit all access' /&gt;" WaitForReady="INTERACTIVE" />
+              </p:Click.Target>
+              <sap2010:WorkflowViewState.IdRef>Click_14</sap2010:WorkflowViewState.IdRef>
+            </p:Click>
+            <sap2010:WorkflowViewState.IdRef>Sequence_9</sap2010:WorkflowViewState.IdRef>
+          </Sequence>
+        </ActivityAction>
+      </p:WindowScope.Body>
+      <sap2010:WorkflowViewState.IdRef>WindowScope_6</sap2010:WorkflowViewState.IdRef>
+    </p:WindowScope>
+    <sap2010:WorkflowViewState.IdRef>Sequence_10</sap2010:WorkflowViewState.IdRef>
+    <sads:DebugSymbol.Symbol>d1FDOlxHaXRcVWlQYXRoU0RLXENvZGUgU2FtcGxlc1xSb2JvdCBBUElcTXlUZXN0V29ya2Zsb3dcV29ya2Zsb3dUZXN0XERvd25sb2FkLnhhbWwtOAOzAQ4CAQE5BYQBFQIBD4UBBZoBFQIBCZsBBbABFQIBAjnVATn2AQIBLT8LgAEWAgEQhQHeAYUByQICAQ6LAQuWARYCAQqbAeABmwG5AgIBCKEBC6wBFgIBA0ANSBcCASlJDVEXAgElUg1aFwIBIVsNYxcCAR1kDWwXAgEZbQ11FwIBFXYNfhcCARGMAQ2UARcCAQuiAQ2qARcCAQRFnwFFvQICASxCOEI8AgErQitCLwIBKk6fAU6oAgIBKEs3SzsCASdLK0suAgEmV58BV80BAgEkVDhUPAIBI1QrVC8CASJgnwFgzwECASBdOF08AgEfXStdLwIBHmmfAWnPAQIBHGY4ZjwCARtmK2YvAgEacp8Bcs8BAgEYbzhvPAIBF28rby8CARZ7nwF7zwECARR4OHg8AgETeCt4LwIBEo4BOI4BPgIBDY4BK44BLwIBDKcBnwGnAcUCAgEHpAE5pAE9AgEGpAErpAEwAgEF</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Click_6" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_8" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_10" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_11" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_12" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,1106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_4" sap:VirtualizedContainerService.HintSize="414,1252" />
+      <sap2010:ViewStateData Id="Click_13" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="336,230">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_5" sap:VirtualizedContainerService.HintSize="414,376" />
+      <sap2010:ViewStateData Id="Click_14" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="336,230">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_6" sap:VirtualizedContainerService.HintSize="414,376" />
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="436,2208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Main_1" sap:VirtualizedContainerService.HintSize="476,2288" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
