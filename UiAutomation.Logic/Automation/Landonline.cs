@@ -1,32 +1,100 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 //using System.Windows.Forms;
 using UiAutomation.Logic.Workflows;
 //using WFICALib;
-using UiAutomation.Logic.RequestsResponses;
 using System.Linq;
-using System.Collections.Generic;
+using UiAutomation.Contract.Models;
 
 namespace UiAutomation.Logic.Automation
 {
-    public static class Landonline
+    public class LandonlineAutomator : CitrixAutomator, ILandonlineAutomator
     {
-        private static string _citrixClientPath = @"C:\Git\Citrix\launch.ica"; // IMPORTANT this file path cannot contain spaces
-        private static string _downloadFileLocation = @"C:\Users\amber.weightman\Downloads\launch.ica";
-        private static string _chromePath = @"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
+        public static string CitrixOutputDirectoryTemp = @"C:\LandonlineOutputDirectory\";
+
+        private static string _citrixClientPath = ConfigurationManager.AppSettings.Get("CitrixClientPath"); // IMPORTANT this file path cannot contain spaces
+        private static string _downloadFileLocation = ConfigurationManager.AppSettings.Get("DownloadFileLocation");
+        private static string _chromePath = ConfigurationManager.AppSettings.Get("ChromePath");
         private static string _landOnlineUrl = @"http://www.linz.govt.nz/land/landonline";
-
-        private static string _user = @"INFOTRACK\amber.weightman";
-
+        
         private static int _maxTimeExpectedForCitrixFirstLoad = 30000; // Initial load of Citrix can take a bit longer than usual. It wouldn't usually be this long, but we need to allow for it.
         private static int _maxTimeExpectedForCitrixReload = 15000;
-
-        private static int _pageSize = 20; // Max number of searches to run per batch
-
-        public static bool EnsureCitrixRunning()
+        
+        /// <summary>
+        /// Max number of searches to run per batch
+        /// </summary>
+        private static int _pageSize
         {
+            get
+            {
+                var size = ConfigurationManager.AppSettings.Get("PageSize");
+                return !string.IsNullOrEmpty(size) ? Convert.ToInt32(size) : 1;
+            }
+        }
+
+        /// <summary>
+        /// Try everything possible to make sure Citrix is running
+        /// </summary>
+        public override bool EnsureCitrixRunning(string autoOrderBulkId, string screenshotDirectoryPath)
+        {
+            var test = _pageSize;
+
+            bool isRunning = false; ;
+            Exception firstAttemptException = null;
+            try
+            {
+                isRunning = EnsureCitrixRunningInner(autoOrderBulkId, screenshotDirectoryPath, attempt: 0);
+            }
+            catch (Exception e)
+            {
+                // If there is already an active robot thread, don't kill it
+                if (e.Message == "Can only have one active robot thread.")
+                {
+                    throw (e);
+                }
+
+                firstAttemptException = e;
+
+                // It failed, but give it another chance. Kill all related processes then try again from scratch.
+                //Threading.KillRobotThread();
+                KillCitrixProcesses(); // all of them, not just the robots
+                EndBrowserProcesses(ProcessHelper.CloseProcessType.Kill);
+                //GC.Collect();
+                try
+                {
+                    isRunning = EnsureCitrixRunningInner(autoOrderBulkId, screenshotDirectoryPath, attempt: 1);
+                }
+                catch (Exception e1)
+                {
+                    // I think this is likely to be an out of memory issue, causing the robot to not be able to start
+                    //var availableMemory = new ComputerInfo().AvailablePhysicalMemory;
+
+                    //var mem = GC.GetTotalMemory();
+
+                    // TODO should we be throwing the first exception or the second? Could add one as an innerException to
+                    // the other, but would that make sense (and that one might already have an innerException, anyway)?
+                    throw e1;
+                }
+            }
+
+            // If the second attempt failed without throwing an exception, throw the exception from the first attempt
+            // (Doesn't even make sense that this would happen, but handle it just in case)
+            if (!isRunning && firstAttemptException != null)
+            {
+                throw firstAttemptException;
+            }
+
+            return isRunning;
+        }
+        
+        private bool EnsureCitrixRunningInner(string autoOrderBulkId, string screenshotDirectoryPath, int attempt = 0)
+        {
+            // Check if the .ica file exists. This file is deleted every time Citrix is launched, but a copy is created as
+            // a .txt file to help avoid the need to re-download the file. If the .ica file doesn't exist but the .txt file
+            // does, recreate the .ica file.
             var fileExists = File.Exists(_citrixClientPath);
             if (!fileExists && File.Exists($"{_citrixClientPath}.txt"))
             {
@@ -35,29 +103,36 @@ namespace UiAutomation.Logic.Automation
             }
 
             // If the .ica file exists already, check whether Landonline is already running
-            if (fileExists && CheckCitrixAvailable(0))
-            {
-                return true;
-            }
-            
-            // If the file exists, attempt to run it
-            // (Note that this may be attempting to run an old, expired file, which may not work)
-            if (fileExists && RunCitrixClient() && CheckCitrixAvailable(_maxTimeExpectedForCitrixReload))
+            if (fileExists && CheckCitrixAvailable(screenshotDirectoryPath, 0, autoOrderBulkId))
             {
                 return true;
             }
 
-            fileExists = DownloadCitrixClient();
-            return fileExists && RunCitrixClient() && CheckCitrixAvailable(_maxTimeExpectedForCitrixFirstLoad);
+            // If the file exists, but Citrix is not already running, attempt to run it
+            // (Note that this may be attempting to run an old, expired file, which may not work)
+            if (fileExists && RunCitrixClient() && CheckCitrixAvailable(screenshotDirectoryPath, _maxTimeExpectedForCitrixReload, autoOrderBulkId))
+            {
+                return true;
+            }
+
+            // The file didn't already exist, so attempt to download it. If download is successful, attempt to run it and confirm
+            // that it is available
+            fileExists = DownloadCitrixClient(screenshotDirectoryPath, autoOrderBulkId);
+            return fileExists && RunCitrixClient() && CheckCitrixAvailable(screenshotDirectoryPath, _maxTimeExpectedForCitrixFirstLoad, autoOrderBulkId);
         }
 
-        private static bool CheckCitrixAvailable(int initialTimeoutDelayAllowed)
+        private static bool CheckCitrixAvailable(string screenshotDirectoryPath, int initialTimeoutDelayAllowed, string autoOrderBulkId)
         {
-            var response = new CheckCitrixAvailabilityWorkflow().Execute(new WorkflowRequest(initialTimeoutDelayAllowed));
+            var response = new CheckCitrixAvailabilityWorkflow().Execute(new CheckCitrixAvailabilityWorkflowRequest(screenshotDirectoryPath, autoOrderBulkId, initialTimeoutDelayAllowed));
             return response.Success;
         }
 
-        private static bool DownloadCitrixClient()
+        private void EndBrowserProcesses(ProcessHelper.CloseProcessType closeProcessType)
+        {
+            ProcessHelper.EndProcessesByName(new [] { "chrome" }, closeProcessType);
+        }
+
+        private bool DownloadCitrixClient(string screenshotDirectoryPath, string autoOrderBulkId)
         {
             // We need to re-download the file, so nuke it if it already exists in downloads
             if (File.Exists(_downloadFileLocation))
@@ -74,18 +149,21 @@ namespace UiAutomation.Logic.Automation
 
             if (!ExecuteProcess(startInfo))
             {
-                throw new ApplicationException("Unable to execute process");
+                throw new ApplicationException($"Unable to execute process for {startInfo.FileName}");
             }
 
             // Wait for 5 seconds while the webpage loads...
             Console.WriteLine($"Waiting for {_landOnlineUrl} to load...");
             int maxTimeExpectedForUrlToLoad = 10000;
-            //Thread.Sleep(5000);
 
-            var response = new ChromeDownloadCitrixWorkflow().Execute(new DownloadCitrixRequest(maxTimeExpectedForUrlToLoad));
+            var response = new ChromeDownloadCitrixWorkflow().Execute(new DownloadCitrixRequest(screenshotDirectoryPath, autoOrderBulkId, maxTimeExpectedForUrlToLoad));
 
             // Wait for the file to be downloaded, then move it to the expected location
-            return MoveCitrixClientFile();
+            var success = MoveCitrixClientFile();
+
+            EndBrowserProcesses(ProcessHelper.CloseProcessType.CloseMainWindow);
+
+            return success;
         }
 
         private static bool RunCitrixClient()
@@ -114,7 +192,7 @@ namespace UiAutomation.Logic.Automation
             }
             catch (Exception e)
             {
-                return false; // TODO should probably not be concealing this
+                throw e;
             }
 
             if (process != null && !process.HasExited)
@@ -433,36 +511,20 @@ namespace UiAutomation.Logic.Automation
 
         #endregion
 
-        public static void ExecuteTitleSearch(TitleSearchRequest[] titleSearchRequests)
+        public void ExecuteTitleSearch(LINZTitleSearchBatch externalRequest)
         {
+            // _pageSize = 4; // TODO this paging is not tested properly yet
             var pagesProcessed = 0;
-            var page = titleSearchRequests.Skip(_pageSize * pagesProcessed++).Take(_pageSize);
+            var page = externalRequest.TitleSearchRequests.Skip(_pageSize * pagesProcessed++).Take(_pageSize);
             while (page.Any())
             {
-                var request = new LINZTitleSearchWorkflowRequest(page.ToArray());
+                var request = new LINZTitleSearchWorkflowRequest(page.ToArray(), externalRequest.ScreenshotDirectoryPath, externalRequest.AutoOrderBulkId);
                 new LINZTitleSearchWorkflow().Execute(request);
 
-                page = titleSearchRequests.Skip(_pageSize * pagesProcessed++).Take(_pageSize);
+                page = externalRequest.TitleSearchRequests.Skip(_pageSize * pagesProcessed++).Take(_pageSize);
             }
         }
+        
     }
-
-    public class TitleSearchRequest
-    {
-        public string TitleReference { get; set; }
-
-        public LINZTitleSearchType Type { get; set; }
-
-        public string OrderId { get; set; }
-
-        public string OutputFilePath { get; set; }
-
-        public bool Success { get; set; }
-
-        public List<SearchResult> SearchResults { get; set; }
-
-        public List<string> Errors { get; set; }
-
-        public List<string> Warnings { get; set; }
-    }
+    
 }

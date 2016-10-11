@@ -46,7 +46,7 @@ namespace UiAutomation.Logic.Automation
             }
             Threading.ActiveRobotWorker = this;
 
-            var workerThread = Threading.CreateRobotThread(() => ExecuteRobotJob(robotWorkflowBase.WorkflowFile));
+            var workerThread = Threading.CreateRobotThread(() => ExecuteRobotJob(robotWorkflowBase.WorkflowFile, robotWorkflowBase.MaxWorkflowDurationMins * 2));
             if (workerThread == null)
             {
                 throw new ApplicationException("Unable to launch robot thread at this time.");
@@ -78,23 +78,24 @@ namespace UiAutomation.Logic.Automation
             InputArguments = inputArguments;
             WorkflowType = workflowType;
         }
-        
-        public void ExecuteRobotJob(string robotWorkflowPath)
+
+        // timeout here (maxWorkflowDurationMins) should not be required, because it is also enforced in ExecuteRobotJobSynchronously
+        // but add a timeout to this loop too just in case anything unexpected goes wrong
+        public void ExecuteRobotJob(string robotWorkflowPath, int maxWorkflowDurationMins)
         {
             IsActive = true;
             
             var resp = ExecuteRobotJobAsync(InputArguments, robotWorkflowPath);
 
-            while (!_shouldStop)
+            var finishTime = DateTime.Now.AddMinutes(maxWorkflowDurationMins);
+
+            while (!_shouldStop && DateTime.Now < finishTime)
             {
-                // TODO timeout? (Although the parent thread does have a timeout after which it will tell this thread to terminate)
+                Thread.Sleep(1000);
             }
 
             //Console.WriteLine("worker thread: terminating gracefully.");
             IsActive = false;
-
-            //Threading.CloseRobotThread();
-
         }
 
         public void RequestStop()
@@ -165,12 +166,13 @@ namespace UiAutomation.Logic.Automation
                 {
                     // Ask the UiRobot to close gracefully
                     _robotClient.CancelJob(RobotJobGuid.Value);
-                    _robotClient.RemoveJob(RobotJobGuid.Value);
-
-                    // TODO Should I sleep or wait? How long does this take? I don't know...
+                    var jobRemoved = _robotClient.RemoveJob(RobotJobGuid.Value);
 
                     // The robot might still be running, or have child threads running, which need to be killed off. Don't trust it to handle its own memory.
-                    Threading.KillRobotThread();
+                    //if (!jobRemoved) // Don't trust that RemoveJob actually terminated all the threads
+                    {
+                        Threading.KillRobotThread();
+                    }
                 }
                
                 // TODO: set large fields to null.

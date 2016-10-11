@@ -1,19 +1,13 @@
-﻿using UiAutomation.Logic.Automation;
-using UiAutomation.Logic.RequestsResponses;
+﻿using UiAutomation.Logic.RequestsResponses;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UiAutomation.Contract.Models;
+using UiAutomation.Logic.Automation;
 
 namespace UiAutomation.Logic.Workflows
 {
-    public enum LINZTitleSearchType
-    {
-        TitleSearchWithDiagram,
-        TitleSearchNoDiagram,
-        Historical,
-        Guaranteed,
-    }
 
     public class LINZTitleSearchWorkflowRequest : WorkflowSearchRequest
     {
@@ -22,10 +16,14 @@ namespace UiAutomation.Logic.Workflows
 
         public LINZTitleSearchType[] Types { get; set; }
 
-        private Dictionary<string, TitleSearchRequest> _sourceRequests;
+        private Dictionary<string, LINZTitleSearch> _sourceRequests;
 
-        public LINZTitleSearchWorkflowRequest(TitleSearchRequest[] titleSearchRequests)
+        public string OutputDirectoryTemp => LandonlineAutomator.CitrixOutputDirectoryTemp;
+
+        public LINZTitleSearchWorkflowRequest(LINZTitleSearch[] titleSearchRequests, string screenshotBaseDirectory, string screenshotProcessSubDirectory) : base(screenshotBaseDirectory, screenshotProcessSubDirectory, WorkflowType.LINZTitleSearch.ToString())
         {
+            if (!titleSearchRequests.Any()) return;
+
             _sourceRequests = titleSearchRequests.ToDictionary(a => a.OrderId, a => a);
 
             var requestCount = titleSearchRequests.Count();
@@ -38,6 +36,11 @@ namespace UiAutomation.Logic.Workflows
                 titleReferences[i] = titleSearchRequests[i].TitleReference;
                 types[i] = titleSearchRequests[i].Type;
                 orderIds[i] = titleSearchRequests[i].OrderId;
+
+                if (string.IsNullOrEmpty(titleSearchRequests[i].OutputDirectory))
+                {
+                    titleSearchRequests[i].OutputDirectory = _defaultOutputDirectory;
+                }
             }
 
             TitleReferences = titleReferences;
@@ -45,7 +48,7 @@ namespace UiAutomation.Logic.Workflows
             OrderIds = orderIds;
         }
 
-        public TitleSearchRequest GetSourceRequest(string orderId)
+        public LINZTitleSearch GetSourceRequest(string orderId)
         {
             return (_sourceRequests == null || !_sourceRequests.ContainsKey(orderId)) ? null : _sourceRequests[orderId];
         }
@@ -66,7 +69,7 @@ namespace UiAutomation.Logic.Workflows
             {
                 throw new ApplicationException("Mismatched OrderId/Type count.");
             }
-
+           
             return isValid;
         }
     }
@@ -87,21 +90,40 @@ namespace UiAutomation.Logic.Workflows
                 if (FileNames != null && FileNames.Any())
                 {
                     // Check that the files actually exist, because we can't trust the workflow for anything
-                    foreach (var fileName in FileNames)
+                    for (var i = 0; i < FileNames.Count; i++)
                     {
-                        var filePath = $"{WorkflowSearchRequest.OutputDirectory}{fileName}";
-                        if (!File.Exists(filePath))
+                        var fileName = FileNames[i];
+                        if (string.IsNullOrEmpty(fileName))
                         {
-                            throw new ApplicationException($"Failed to successfully create file {filePath}.");
+                            continue;
                         }
 
-                        // Update the source request with the saved file name
                         var orderId = fileName.Split('_')[0];
                         var associatedSourceRequest = workflowSearchRequest.GetSourceRequest(orderId);
+                        if (associatedSourceRequest == null)
+                        {
+                            throw new ApplicationException($"Could not find source request for file {fileName}.");
+                        }
+
+                        if (string.IsNullOrEmpty(associatedSourceRequest.OutputDirectory))
+                        {
+                            throw new ApplicationException($"Output directory not set.");
+                        }
+
+                        // Unable to saved to a network file location from within Citrix
+                        var tempFilePath = $"{workflowSearchRequest.OutputDirectoryTemp}{fileName}";
+                        if (!File.Exists(tempFilePath))
+                        {
+                            throw new ApplicationException($"Failed to successfully create file {tempFilePath}.");
+                        }
+                        var filePath = $"{associatedSourceRequest.OutputDirectory}{fileName}";
+                        File.Move(tempFilePath, filePath);
+                        
+                        // Update the source request with the saved file name
                         if (associatedSourceRequest != null)
                         {
                             associatedSourceRequest.Success = true;
-                            associatedSourceRequest.OutputFilePath = filePath;
+                            associatedSourceRequest.AddOutputFilePath(filePath);
                         }
                     }
                 }
@@ -139,60 +161,24 @@ namespace UiAutomation.Logic.Workflows
                         var associatedSourceRequest = workflowSearchRequest.GetSourceRequest(message.OrderId);
                         if (associatedSourceRequest != null)
                         {
-                            if (associatedSourceRequest.Errors == null) associatedSourceRequest.Errors = new List<string>();
-                            associatedSourceRequest.Errors.Add(message.Text);
+                            if (associatedSourceRequest.Errors == null)
+                            {
+                                associatedSourceRequest.Errors = new List<string> { message.Text };
+                                //associatedSourceRequest.Exception = new ApplicationException(associatedSourceRequest.Errors.First());
+                                associatedSourceRequest.ExceptionType = new ApplicationException().GetType().Name;
+                                associatedSourceRequest.ExceptionMsg = associatedSourceRequest.Errors.First();
+                            }
+                            else
+                            {
+                                associatedSourceRequest.Errors.Add(message.Text);
+                            }
                         }
                     }
                 }
             }
             
             return isValid;
-        }
-        
-    }
-
-    public class SearchResults
-    {
-        public string OrderId { get; set; }
-        public List<SearchResult> Results { get; set; }
-
-        public SearchResults(KeyValuePair<string, string> data)
-        {
-            OrderId = data.Key;
-            Results = new List<SearchResult>();
-
-            // All lines in data.Value (excluding the first line, which is always the header)
-            var lines = data.Value.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Skip(1);
-            foreach (var line in lines)
-            {
-                Results.Add(new SearchResult(line));
-            }
-        }
-    }
-
-    public class SearchResult
-    {
-        public string CT { get; set; }
-        public string Owner { get; set; }
-        public string Status { get; set; }
-        public string PotentiallyMaoriLand { get; set; }
-        public string LegalDescription { get; set; }
-        public string IndicativeArea { get; set; }
-        public string LandDistrict { get; set; }
-        public string TimeshareWeek { get; set; }
-
-        public SearchResult(string tabSeparatedData)
-        {
-            var values = tabSeparatedData.Split(new char[] { '\t' }, StringSplitOptions.None);
-            CT = values[0];
-            Owner = values[1];
-            Status = values[2];
-            PotentiallyMaoriLand = values[3];
-            LegalDescription = values[4];
-            IndicativeArea = values[5];
-            LandDistrict = values[6];
-            TimeshareWeek = values[7];
-        }
+        }    
     }
     
     public class LINZTitleSearchWorkflow : RobotWorkflowBase<LINZTitleSearchWorkflowRequest, LINZTitleSearchWorkflowResponse>

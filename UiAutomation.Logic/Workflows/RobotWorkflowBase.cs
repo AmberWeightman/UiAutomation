@@ -1,6 +1,5 @@
 ﻿using System;
 using UiAutomation.Logic.RequestsResponses;
-using System.Linq;
 using UiAutomation.Logic.Automation;
 
 namespace UiAutomation.Logic.Workflows
@@ -24,7 +23,10 @@ namespace UiAutomation.Logic.Workflows
                 var response = robotWorker.ExecuteRobotJobSynchronously(this);
 
                 response.Validate(request);
-                PrintMessages(response);
+                if (response.Error != null)
+                {
+                    throw response.Error;
+                }
 
                 return response as TResponse;
             }
@@ -39,27 +41,7 @@ namespace UiAutomation.Logic.Workflows
                 throw new NotImplementedException();
             }
         }
-
-        private void PrintMessages(WorkflowResponse response)
-        {
-            // TODO this error checking probably doesn't belong here
-            if (response.ErrorMessages.Any())
-            {
-                foreach (var error in response.ErrorMessages)
-                {
-                    Console.WriteLine($"Error {error.Code}: {error}");
-                }
-            }
-
-            if (response.WarningMessages.Any())
-            {
-                foreach (var warn in response.WarningMessages)
-                {
-                    Console.WriteLine($"Warning {warn.Code}: {warn}");
-                }
-            }
-        }
-
+        
     }
     
 }

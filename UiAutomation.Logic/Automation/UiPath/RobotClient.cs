@@ -3,6 +3,7 @@ using UiAutomation.Logic.RequestsResponses;
 using System;
 using System.IO;
 using System.ServiceModel;
+using System.Threading;
 
 namespace UiAutomation.Logic.Automation.UiPath
 {
@@ -60,9 +61,22 @@ namespace UiAutomation.Logic.Automation.UiPath
             Channel.CancelJob(jobId.ToString());
         }
 
-        public void RemoveJob(Guid jobId)
+        public bool RemoveJob(Guid jobId)
         {
             Channel.RemoveJob(jobId.ToString());
+
+            // Don't know how long this takes, so loop briefly to make sure it's finished (if RemoveJob worked, job should no longer be queryable)
+            WorkflowResponse job = null;
+            var attempts = 0; // will attempt to remove the job for 10 seconds
+            while (job == null || job.WorkflowStatus != WorkflowStatus.Unknown || attempts > 10)
+            {
+                if (job != null)
+                {
+                    Thread.Sleep(1000);
+                }
+                job = QueryJob(jobId);
+            }
+            return job.WorkflowStatus == WorkflowStatus.Unknown;
         }
 
         public WorkflowResponse QueryJob(Guid jobId)
@@ -71,17 +85,6 @@ namespace UiAutomation.Logic.Automation.UiPath
 
             Console.WriteLine($"Queried job: {response}");
             var completedResult = JsonConvert.DeserializeObject<WorkflowResponse>(response, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None });
-            return completedResult;
-        }
-
-        public WorkflowResponse QueryJobAsync(Guid jobId)
-        {
-            var response = Channel.QueryJobAsync(jobId.ToString());
-
-            var status = response.Status;
-
-            Console.WriteLine($"Queried job: {response} with status {status}");
-            var completedResult = JsonConvert.DeserializeObject<WorkflowResponse>(response.Result, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None });
             return completedResult;
         }
         
@@ -102,20 +105,20 @@ namespace UiAutomation.Logic.Automation.UiPath
 
             var worker = Threading.ActiveRobotWorker;
             
-            if (completedResult.State == System.Activities.ActivityInstanceState.Faulted)
-            {
-                Console.WriteLine($"{worker.WorkflowType} has errors:");
-                Console.WriteLine(completedResult.Error.Message);
-                return;
-            }
-            else if(completedResult.State ==  System.Activities.ActivityInstanceState.Canceled)
-            {
-                Console.WriteLine($"{worker.WorkflowType} cancelled.\n");
-            }
-            else
-            {
-                Console.WriteLine($"{worker.WorkflowType} completed without fatal errors.\n");
-            }
+            //if (completedResult.State == System.Activities.ActivityInstanceState.Faulted)
+            //{
+            //    //Console.WriteLine($"{worker.WorkflowType} has errors:");
+            //    //Console.WriteLine(completedResult.Error.Message);
+            //    //return;
+            //}
+            //else if(completedResult.State ==  System.Activities.ActivityInstanceState.Canceled)
+            //{
+            //    //Console.WriteLine($"{worker.WorkflowType} cancelled.\n");
+            //}
+            //else
+            //{
+            //    //Console.WriteLine($"{worker.WorkflowType} completed without fatal errors.\n");
+            //}
 
             worker.SetResult(completedResult);
             worker.RequestStop();

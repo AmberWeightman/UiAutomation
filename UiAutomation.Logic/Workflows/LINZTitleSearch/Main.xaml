@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Main" this:Main.DefaultTimeoutMS="2000" this:Main.OutputDirectory="C:\LandonlineOutputDirectory\" this:Main.Types="[New Int32(){3,2}]" this:Main.InitialTimeoutMS="0"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Main" this:Main.DefaultTimeoutMS="2000" this:Main.Types="[New Int32(){3,2}]" this:Main.InitialTimeoutMS="0" this:Main.SavedScreenShotDirectory="\\MT-SCHFILE01-L\AutoOrderAttachments\UiPath\" this:Main.OutputDirectoryTemp="C:\LandonlineOutputDirectory"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,7 +17,6 @@
     <x:Property Name="SearchResults" Type="OutArgument(scg:Dictionary(x:String, x:String))" />
     <x:Property Name="DefaultTimeoutMS" Type="InArgument(x:Int32)" />
     <x:Property Name="TitleReferences" Type="InArgument(s:String[])" />
-    <x:Property Name="OutputDirectory" Type="InArgument(x:String)" />
     <x:Property Name="ErrorMessages" Type="OutArgument(scg:List(scg:KeyValuePair(x:String, s:Object[])))" />
     <x:Property Name="WarningMessages" Type="OutArgument(scg:List(scg:KeyValuePair(x:String, s:Object[])))" />
     <x:Property Name="OrderIds" Type="InOutArgument(s:String[])" />
@@ -25,6 +24,8 @@
     <x:Property Name="FileNames" Type="OutArgument(scg:List(x:String))" />
     <x:Property Name="InitialTimeoutMS" Type="InArgument(x:Int32)" />
     <x:Property Name="Success" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="SavedScreenShotDirectory" Type="InArgument(x:String)" />
+    <x:Property Name="OutputDirectoryTemp" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -82,6 +83,7 @@
       <Variable x:TypeArguments="x:Boolean" Default="False" Name="FoundSearchesImage" />
       <Variable x:TypeArguments="x:Boolean" Default="False" Name="SearchSuccessful" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="SearchSuccessfulCount" />
+      <Variable x:TypeArguments="x:Int32" Default="1" Name="imageName" />
     </Flowchart.Variables>
     <Flowchart.StartNode>
       <FlowStep x:Name="__ReferenceID5" sap2010:WorkflowViewState.IdRef="FlowStep_14">
@@ -206,6 +208,25 @@
                                     <Variable x:TypeArguments="x:Boolean" Default="False" Name="foundImage" />
                                     <Variable x:TypeArguments="x:String" Default="Titles image" Name="imageDescription" />
                                   </Sequence.Variables>
+                                  <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_1">
+                                    <Sequence.Variables>
+                                      <Variable x:TypeArguments="ui:Image" Name="image" />
+                                    </Sequence.Variables>
+                                    <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_1" Screenshot="[image]">
+                                      <ui:TakeScreenshot.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline - Searches - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                      </ui:TakeScreenshot.Target>
+                                    </ui:TakeScreenshot>
+                                    <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_1" Image="[image]" />
+                                    <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_1">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                  </Sequence>
                                   <Sequence DisplayName="ClickImage" sap2010:WorkflowViewState.IdRef="Sequence_165">
                                     <Sequence.Variables>
                                       <Variable x:TypeArguments="x:Boolean" Default="False" Name="foundImage" />
@@ -305,6 +326,25 @@
                                           <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                         </ActivityAction.Argument>
                                         <Sequence DisplayName="Open &quot;Title Search&quot; window" sap2010:WorkflowViewState.IdRef="Sequence_142">
+                                          <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_189">
+                                            <Sequence.Variables>
+                                              <Variable x:TypeArguments="ui:Image" Name="image" />
+                                            </Sequence.Variables>
+                                            <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_2" Screenshot="[image]">
+                                              <ui:TakeScreenshot.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline - Searches - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                              </ui:TakeScreenshot.Target>
+                                            </ui:TakeScreenshot>
+                                            <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_2" Image="[image]" />
+                                            <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_81">
+                                              <Assign.To>
+                                                <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                              </Assign.To>
+                                              <Assign.Value>
+                                                <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                              </Assign.Value>
+                                            </Assign>
+                                          </Sequence>
                                           <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_9">
                                             <ui:CommentOut.Body>
                                               <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_174">
@@ -391,6 +431,25 @@
                                               <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                             </ActivityAction.Argument>
                                             <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_90">
+                                              <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_190">
+                                                <Sequence.Variables>
+                                                  <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                </Sequence.Variables>
+                                                <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_3" Screenshot="[image]">
+                                                  <ui:TakeScreenshot.Target>
+                                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='CDE_S01 - Search - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                  </ui:TakeScreenshot.Target>
+                                                </ui:TakeScreenshot>
+                                                <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_3" Image="[image]" />
+                                                <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_82">
+                                                  <Assign.To>
+                                                    <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                  </Assign.To>
+                                                  <Assign.Value>
+                                                    <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                  </Assign.Value>
+                                                </Assign>
+                                              </Sequence>
                                               <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type TitleReference into auto-focussed CT field" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_6" SendWindowMessages="False" SimulateType="False" Text="[TitleReferences(index)]">
                                                 <ui:TypeInto.Target>
                                                   <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
@@ -438,6 +497,25 @@
                                                   </Assign>
                                                 </Sequence>
                                               </While>
+                                              <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_191">
+                                                <Sequence.Variables>
+                                                  <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                </Sequence.Variables>
+                                                <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_4" Screenshot="[image]">
+                                                  <ui:TakeScreenshot.Target>
+                                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='CDE_S01 - Search - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                  </ui:TakeScreenshot.Target>
+                                                </ui:TakeScreenshot>
+                                                <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_4" Image="[image]" />
+                                                <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_83">
+                                                  <Assign.To>
+                                                    <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                  </Assign.To>
+                                                  <Assign.Value>
+                                                    <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                  </Assign.Value>
+                                                </Assign>
+                                              </Sequence>
                                               <Sequence DisplayName="Execute Search" sap2010:WorkflowViewState.IdRef="Sequence_82">
                                                 <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Hotkey Alt+C (&quot;Search Now&quot;)" EmptyField="False" sap2010:WorkflowViewState.IdRef="SendHotkey_30" Key="C" KeyModifiers="Alt" SendWindowMessages="False" SpecialKey="False">
                                                   <ui:SendHotkey.Target>
@@ -452,6 +530,25 @@
                                                           <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                                         </ActivityAction.Argument>
                                                         <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_80">
+                                                          <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_192">
+                                                            <Sequence.Variables>
+                                                              <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                            </Sequence.Variables>
+                                                            <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" Screenshot="[image]">
+                                                              <ui:TakeScreenshot.Target>
+                                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline Workspace - CDE_S01 - Search - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                              </ui:TakeScreenshot.Target>
+                                                            </ui:TakeScreenshot>
+                                                            <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" Image="[image]" />
+                                                            <Assign DisplayName="++imageName">
+                                                              <Assign.To>
+                                                                <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                              </Assign.To>
+                                                              <Assign.Value>
+                                                                <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                              </Assign.Value>
+                                                            </Assign>
+                                                          </Sequence>
                                                           <Assign DisplayName="SearchSuccessful = False" sap2010:WorkflowViewState.IdRef="Assign_39">
                                                             <Assign.To>
                                                               <OutArgument x:TypeArguments="x:Boolean">[SearchSuccessful]</OutArgument>
@@ -516,6 +613,25 @@
                                                             <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                                           </ActivityAction.Argument>
                                                           <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_136">
+                                                            <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_193">
+                                                              <Sequence.Variables>
+                                                                <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                              </Sequence.Variables>
+                                                              <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_5" Screenshot="[image]">
+                                                                <ui:TakeScreenshot.Target>
+                                                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Printing Preferences - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                                </ui:TakeScreenshot.Target>
+                                                              </ui:TakeScreenshot>
+                                                              <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_5" Image="[image]" />
+                                                              <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_84">
+                                                                <Assign.To>
+                                                                  <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                                </Assign.To>
+                                                                <Assign.Value>
+                                                                  <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                                </Assign.Value>
+                                                              </Assign>
+                                                            </Sequence>
                                                             <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'wfica32.exe Printing'" sap2010:WorkflowViewState.IdRef="ClickImage_12" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
                                                               <ui:ClickImage.CursorPosition>
                                                                 <ui:CursorPosition OffsetX="0" OffsetY="0" Position="Center" />
@@ -537,7 +653,7 @@
                                                                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
                                                               </ui:SendHotkey.Target>
                                                             </ui:SendHotkey>
-                                                            <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_11" SendWindowMessages="False" SimulateType="False" Text="[OutputDirectory]">
+                                                            <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_11" SendWindowMessages="False" SimulateType="False" Text="[OutputDirectoryTemp]">
                                                               <ui:TypeInto.Target>
                                                                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
                                                               </ui:TypeInto.Target>
@@ -547,7 +663,7 @@
                                                                 <OutArgument x:TypeArguments="x:String">[fileName]</OutArgument>
                                                               </Assign.To>
                                                               <Assign.Value>
-                                                                <InArgument x:TypeArguments="x:String">[OrderIds(index)+ "_" + (DateTime.Now.ToString("yyMMddHHmmss")) + ".pdf"]</InArgument>
+                                                                <InArgument x:TypeArguments="x:String">[OrderIds(index)+ "_" + (DateTime.Now.ToString("yyyyMMddHHmmss")) + ".pdf"]</InArgument>
                                                               </Assign.Value>
                                                             </Assign>
                                                             <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_12" SendWindowMessages="False" SimulateType="False" Text="[fileName]">
@@ -556,6 +672,25 @@
                                                               </ui:TypeInto.Target>
                                                             </ui:TypeInto>
                                                             <AddToCollection x:TypeArguments="x:String" Collection="[FileNames]" DisplayName="Add to collection&lt;string&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_8" Item="[fileName]" />
+                                                            <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_194">
+                                                              <Sequence.Variables>
+                                                                <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                              </Sequence.Variables>
+                                                              <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_6" Screenshot="[image]">
+                                                                <ui:TakeScreenshot.Target>
+                                                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Printing Preferences - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                                </ui:TakeScreenshot.Target>
+                                                              </ui:TakeScreenshot>
+                                                              <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_7" Image="[image]" />
+                                                              <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_87">
+                                                                <Assign.To>
+                                                                  <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                                </Assign.To>
+                                                                <Assign.Value>
+                                                                  <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                                </Assign.Value>
+                                                              </Assign>
+                                                            </Sequence>
                                                           </Sequence>
                                                         </ActivityAction>
                                                       </ui:WindowScope.Body>
@@ -567,6 +702,25 @@
                                                             <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                                           </ActivityAction.Argument>
                                                           <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_137">
+                                                            <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_196">
+                                                              <Sequence.Variables>
+                                                                <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                              </Sequence.Variables>
+                                                              <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_8" Screenshot="[image]">
+                                                                <ui:TakeScreenshot.Target>
+                                                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Select the PDF file destination - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                                </ui:TakeScreenshot.Target>
+                                                              </ui:TakeScreenshot>
+                                                              <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_8" Image="[image]" />
+                                                              <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_88">
+                                                                <Assign.To>
+                                                                  <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                                </Assign.To>
+                                                                <Assign.Value>
+                                                                  <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                                </Assign.Value>
+                                                              </Assign>
+                                                            </Sequence>
                                                             <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'wfica32.exe Select'" sap2010:WorkflowViewState.IdRef="ClickImage_13" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
                                                               <ui:ClickImage.CursorPosition>
                                                                 <ui:CursorPosition OffsetX="0" OffsetY="0" Position="Center" />
@@ -589,6 +743,25 @@
                                                             <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                                           </ActivityAction.Argument>
                                                           <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_138">
+                                                            <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_197">
+                                                              <Sequence.Variables>
+                                                                <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                              </Sequence.Variables>
+                                                              <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_9" Screenshot="[image]">
+                                                                <ui:TakeScreenshot.Target>
+                                                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Printing Preferences - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                                </ui:TakeScreenshot.Target>
+                                                              </ui:TakeScreenshot>
+                                                              <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_9" Image="[image]" />
+                                                              <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_89">
+                                                                <Assign.To>
+                                                                  <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                                </Assign.To>
+                                                                <Assign.Value>
+                                                                  <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                                </Assign.Value>
+                                                              </Assign>
+                                                            </Sequence>
                                                             <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'wfica32.exe Printing'" sap2010:WorkflowViewState.IdRef="Click_10" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
                                                               <ui:Click.CursorPosition>
                                                                 <ui:CursorPosition Position="Center">
@@ -619,6 +792,25 @@
                                                             <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                                           </ActivityAction.Argument>
                                                           <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_139">
+                                                            <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_198">
+                                                              <Sequence.Variables>
+                                                                <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                              </Sequence.Variables>
+                                                              <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_10" Screenshot="[image]">
+                                                                <ui:TakeScreenshot.Target>
+                                                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Print - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                                </ui:TakeScreenshot.Target>
+                                                              </ui:TakeScreenshot>
+                                                              <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_10" Image="[image]" />
+                                                              <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_90">
+                                                                <Assign.To>
+                                                                  <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                                </Assign.To>
+                                                                <Assign.Value>
+                                                                  <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                                </Assign.Value>
+                                                              </Assign>
+                                                            </Sequence>
                                                             <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Send hotkey" EmptyField="False" sap2010:WorkflowViewState.IdRef="SendHotkey_70" Key="P" KeyModifiers="Alt" SendWindowMessages="False" SpecialKey="False">
                                                               <ui:SendHotkey.Target>
                                                                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
@@ -638,6 +830,25 @@
                                                       <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                                     </ActivityAction.Argument>
                                                     <Sequence DisplayName="Close the search window (only way to ensure defaults cleared)" sap2010:WorkflowViewState.IdRef="Sequence_140">
+                                                      <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_199">
+                                                        <Sequence.Variables>
+                                                          <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                        </Sequence.Variables>
+                                                        <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_11" Screenshot="[image]">
+                                                          <ui:TakeScreenshot.Target>
+                                                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='CDE_S01 - Search - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                          </ui:TakeScreenshot.Target>
+                                                        </ui:TakeScreenshot>
+                                                        <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_11" Image="[image]" />
+                                                        <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_91">
+                                                          <Assign.To>
+                                                            <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                          </Assign.To>
+                                                          <Assign.Value>
+                                                            <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                          </Assign.Value>
+                                                        </Assign>
+                                                      </Sequence>
                                                       <ui:ClickImage DelayMS="{x:Null}" ClickType="CLICK_SINGLE" ContinueOnError="False" DelayBefore="[If(SearchSuccessful, (DefaultTimeoutMS * 2), 0)]" DisplayName="Click image 'wfica32.exe CDE_S01'" sap2010:WorkflowViewState.IdRef="ClickImage_16" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
                                                         <ui:ClickImage.CursorPosition>
                                                           <ui:CursorPosition Position="Center">
@@ -702,11 +913,62 @@
                                               <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                             </ActivityAction.Argument>
                                             <Sequence DisplayName="Open &quot;Title Search&quot; window" sap2010:WorkflowViewState.IdRef="Sequence_151">
+                                              <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_201">
+                                                <Sequence.Variables>
+                                                  <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                  <Variable x:TypeArguments="ui:Window" Name="applicationWindow" />
+                                                </Sequence.Variables>
+                                                <ui:TakeScreenshot WaitBefore="{x:Null}" ContinueOnError="True" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_12" Screenshot="[image]">
+                                                  <ui:TakeScreenshot.Target>
+                                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline - Searches - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                  </ui:TakeScreenshot.Target>
+                                                </ui:TakeScreenshot>
+                                                <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_12" Image="[image]" />
+                                                <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_92">
+                                                  <Assign.To>
+                                                    <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                  </Assign.To>
+                                                  <Assign.Value>
+                                                    <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                  </Assign.Value>
+                                                </Assign>
+                                              </Sequence>
                                               <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Hotkey [Alt + FC] (Close window)" EmptyField="False" sap2010:WorkflowViewState.IdRef="SendHotkey_75" Key="FC" KeyModifiers="Alt" SendWindowMessages="False" SpecialKey="False">
                                                 <ui:SendHotkey.Target>
                                                   <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
                                                 </ui:SendHotkey.Target>
                                               </ui:SendHotkey>
+                                              <Sequence DisplayName="Save screenshot of active window" sap2010:WorkflowViewState.IdRef="Sequence_1">
+                                                <Sequence.Variables>
+                                                  <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                  <Variable x:TypeArguments="ui:Window" Name="activeWindow" />
+                                                </Sequence.Variables>
+                                                <ui:GetActiveWindow ApplicationWindow="[activeWindow]" ContinueOnError="True" DisplayName="Get active window" sap2010:WorkflowViewState.IdRef="GetActiveWindow_1">
+                                                  <ui:GetActiveWindow.Body>
+                                                    <ActivityAction x:TypeArguments="x:Object">
+                                                      <ActivityAction.Argument>
+                                                        <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                                      </ActivityAction.Argument>
+                                                      <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_2">
+                                                        <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_1" Screenshot="[image]">
+                                                          <ui:TakeScreenshot.Target>
+                                                            <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[activeWindow]" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                          </ui:TakeScreenshot.Target>
+                                                        </ui:TakeScreenshot>
+                                                        <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_1" Image="[image]" />
+                                                        <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_1">
+                                                          <Assign.To>
+                                                            <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                          </Assign.To>
+                                                          <Assign.Value>
+                                                            <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                          </Assign.Value>
+                                                        </Assign>
+                                                      </Sequence>
+                                                    </ActivityAction>
+                                                  </ui:GetActiveWindow.Body>
+                                                </ui:GetActiveWindow>
+                                              </Sequence>
                                             </Sequence>
                                           </ActivityAction>
                                         </ui:WindowScope.Body>
@@ -748,98 +1010,156 @@
                                                 <Variable x:TypeArguments="x:Boolean" Default="False" Name="foundImage" />
                                                 <Variable x:TypeArguments="x:String" Default="Titles image" Name="imageDescription" />
                                               </Sequence.Variables>
+                                              <Sequence DisplayName="Save screenshot" sap2010:WorkflowViewState.IdRef="Sequence_195">
+                                                <Sequence.Variables>
+                                                  <Variable x:TypeArguments="ui:Image" Name="image" />
+                                                </Sequence.Variables>
+                                                <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_7" Screenshot="[image]">
+                                                  <ui:TakeScreenshot.Target>
+                                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline Workspace - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                  </ui:TakeScreenshot.Target>
+                                                </ui:TakeScreenshot>
+                                                <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_6" Image="[image]" />
+                                                <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_85">
+                                                  <Assign.To>
+                                                    <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                  </Assign.To>
+                                                  <Assign.Value>
+                                                    <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                  </Assign.Value>
+                                                </Assign>
+                                              </Sequence>
                                               <Sequence DisplayName="ClickImage" sap2010:WorkflowViewState.IdRef="Sequence_172">
                                                 <Sequence.Variables>
                                                   <Variable x:TypeArguments="x:Boolean" Default="False" Name="foundImage" />
                                                   <Variable x:TypeArguments="x:Double" Default="0.8" Name="findImageAccuracy" />
                                                 </Sequence.Variables>
                                                 <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
-                                                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_169">
-                                                    <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" Window="{x:Null}" ContinueOnError="False" DisplayName="Attach Window 'Landonlin Transpare'" sap2010:WorkflowViewState.IdRef="WindowScope_42" InformativeScreenshot="d2ae58825b478c6a30e5abf78ce5491e" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline Workspace - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]">
-                                                      <ui:WindowScope.Body>
-                                                        <ActivityAction x:TypeArguments="x:Object">
-                                                          <ActivityAction.Argument>
-                                                            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
-                                                          </ActivityAction.Argument>
-                                                          <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_180">
-                                                            <Sequence.Variables>
-                                                              <Variable x:TypeArguments="x:Double" Default="0.8" Name="findImageAccuracy" />
-                                                              <Variable x:TypeArguments="x:Boolean" Default="False" Name="foundImage" />
-                                                              <Variable x:TypeArguments="x:String" Default="Titles image" Name="imageDescription" />
-                                                            </Sequence.Variables>
-                                                            <ui:ClickImage DelayMS="{x:Null}" ClickType="CLICK_DOUBLE" ContinueOnError="False" DelayBefore="500" DisplayName="Click the menu to ensure it has loaded (Sch A)" sap2010:WorkflowViewState.IdRef="ClickImage_29" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-                                                              <ui:ClickImage.CursorPosition>
-                                                                <ui:CursorPosition OffsetX="0" OffsetY="0" Position="Center" />
-                                                              </ui:ClickImage.CursorPosition>
-                                                              <ui:ClickImage.Image>
-                                                                <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAEAAAAA7CAYAAADLjIzcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFzSURBVGhD7ZZRbsMwDENz/4PlWt0MUACnSanaWcE28QECG5qebX7teAxHBUDHogKgY1EB0LGoAOhYVAB0LLcUcBzHl4moZDq4rQDT7HGVTAcqANqKPerqcZVMB60n+Uf5qWY6UQHQFvgR/KjI59883bSdED3m3elEBUC34S/O3+yf5/nN4+9oOlAB0G34C/M3+6MLiKaS7aC1gGfzTn43KgC6Db4sX579DM7wHvZ3owKg2+DL8uXZz+AM72F/N20FZHNFlOfpQAVAx6ICoGNRAdCxqADoWFQAdCwqADqWlwvo/t+cueUMaAl/oe4L/voCuvlzBax1Gybys2/vmbK/MC/zq9ST4OpgJruE+bye7V0a5a7yhs9k1FIJ/kA/RuT79Qjv814/Bv+u8FraUTnY+/a9a2/Es3Wmnvwku9AiW6v4P9m7iHyfyailiPWHbTzZGvu2dpUxoowR5ReRd0U9+U9RAdCxqADoWFQAdCzDC3g8PgBGDuIEhAGrwAAAAABJRU5ErkJggg==" />
-                                                              </ui:ClickImage.Image>
-                                                              <ui:ClickImage.Target>
-                                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="[DefaultTimeoutMS + 500]" WaitForReady="INTERACTIVE" />
-                                                              </ui:ClickImage.Target>
-                                                            </ui:ClickImage>
-                                                            <Assign sap2010:WorkflowViewState.IdRef="Assign_78">
-                                                              <Assign.To>
-                                                                <OutArgument x:TypeArguments="x:Boolean">[FoundSearchesImage]</OutArgument>
-                                                              </Assign.To>
-                                                              <Assign.Value>
-                                                                <InArgument x:TypeArguments="x:Boolean">True</InArgument>
-                                                              </Assign.Value>
-                                                            </Assign>
-                                                          </Sequence>
-                                                        </ActivityAction>
-                                                      </ui:WindowScope.Body>
-                                                    </ui:WindowScope>
-                                                  </Sequence>
-                                                  <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_10">
-                                                    <ui:CommentOut.Body>
-                                                      <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_175">
-                                                        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_171">
-                                                          <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" Window="{x:Null}" ContinueOnError="False" DisplayName="Attach Window 'Landonlin Transpare'" sap2010:WorkflowViewState.IdRef="WindowScope_43" InformativeScreenshot="d2ae58825b478c6a30e5abf78ce5491e" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline Workspace - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]">
+                                                  <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" Window="{x:Null}" ContinueOnError="False" DisplayName="Attach Window 'Landonlin Transpare'" sap2010:WorkflowViewState.IdRef="WindowScope_42" InformativeScreenshot="d2ae58825b478c6a30e5abf78ce5491e" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline Workspace - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]">
+                                                    <ui:WindowScope.Body>
+                                                      <ActivityAction x:TypeArguments="x:Object">
+                                                        <ActivityAction.Argument>
+                                                          <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                                        </ActivityAction.Argument>
+                                                        <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_180">
+                                                          <Sequence.Variables>
+                                                            <Variable x:TypeArguments="x:Double" Default="0.8" Name="findImageAccuracy" />
+                                                            <Variable x:TypeArguments="x:Boolean" Default="False" Name="foundImage" />
+                                                            <Variable x:TypeArguments="x:String" Default="Titles image" Name="imageDescription" />
+                                                          </Sequence.Variables>
+                                                          <ui:ClickImage DelayMS="{x:Null}" ClickType="CLICK_DOUBLE" ContinueOnError="True" DelayBefore="500" DisplayName="Click the menu to ensure it has loaded (Sch A)" sap2010:WorkflowViewState.IdRef="ClickImage_29" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+                                                            <ui:ClickImage.CursorPosition>
+                                                              <ui:CursorPosition OffsetX="0" OffsetY="0" Position="Center" />
+                                                            </ui:ClickImage.CursorPosition>
+                                                            <ui:ClickImage.Image>
+                                                              <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAEAAAAA7CAYAAADLjIzcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFzSURBVGhD7ZZRbsMwDENz/4PlWt0MUACnSanaWcE28QECG5qebX7teAxHBUDHogKgY1EB0LGoAOhYVAB0LLcUcBzHl4moZDq4rQDT7HGVTAcqANqKPerqcZVMB60n+Uf5qWY6UQHQFvgR/KjI59883bSdED3m3elEBUC34S/O3+yf5/nN4+9oOlAB0G34C/M3+6MLiKaS7aC1gGfzTn43KgC6Db4sX579DM7wHvZ3owKg2+DL8uXZz+AM72F/N20FZHNFlOfpQAVAx6ICoGNRAdCxqADoWFQAdCwqADqWlwvo/t+cueUMaAl/oe4L/voCuvlzBax1Gybys2/vmbK/MC/zq9ST4OpgJruE+bye7V0a5a7yhs9k1FIJ/kA/RuT79Qjv814/Bv+u8FraUTnY+/a9a2/Es3Wmnvwku9AiW6v4P9m7iHyfyailiPWHbTzZGvu2dpUxoowR5ReRd0U9+U9RAdCxqADoWFQAdCzDC3g8PgBGDuIEhAGrwAAAAABJRU5ErkJggg==" />
+                                                            </ui:ClickImage.Image>
+                                                            <ui:ClickImage.Target>
+                                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="[DefaultTimeoutMS + 500]" WaitForReady="INTERACTIVE" />
+                                                            </ui:ClickImage.Target>
+                                                          </ui:ClickImage>
+                                                          <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" Window="{x:Null}" ContinueOnError="True" DisplayName="Attach Window 'Landonlin Transpare'" sap2010:WorkflowViewState.IdRef="WindowScope_46" InformativeScreenshot="de7756c94be24ff06208705fc4a951f5" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline - Searches - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]">
                                                             <ui:WindowScope.Body>
                                                               <ActivityAction x:TypeArguments="x:Object">
                                                                 <ActivityAction.Argument>
                                                                   <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                                                                 </ActivityAction.Argument>
-                                                                <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_181">
-                                                                  <Sequence.Variables>
-                                                                    <Variable x:TypeArguments="x:Double" Default="0.8" Name="findImageAccuracy" />
-                                                                    <Variable x:TypeArguments="x:Boolean" Default="False" Name="foundImage" />
-                                                                    <Variable x:TypeArguments="x:String" Default="Titles image" Name="imageDescription" />
-                                                                  </Sequence.Variables>
-                                                                  <ui:ClickImage DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOUBLE" ContinueOnError="False" DisplayName="Click the menu to ensure it has loaded  (Sch B)" sap2010:WorkflowViewState.IdRef="ClickImage_31" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-                                                                    <ui:ClickImage.CursorPosition>
-                                                                      <ui:CursorPosition OffsetX="0" OffsetY="0" Position="Center" />
-                                                                    </ui:ClickImage.CursorPosition>
-                                                                    <ui:ClickImage.Image>
-                                                                      <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAADcAAAA0CAYAAAAuT6DoAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFvSURBVGhD7ZOxbcUwDER/mTIrZITMlDJlyqyQ8q+RlbJGSgcqDricKVq26IL+fMBBJEXbPMi6LRemzGWlzGWlzGXlFHO359d/shjpmeU0c59f3+7gIz2zlLm9YGBv8JGeWULN6cCq0Z4oytwoGJDvEmu0J4owc9agRxVFmfPgoXq/Wqu/fdxXNc4tzVLmPHiYhzRnKZ25LR3pn6HMeWCQ3m/mgZ4jz45Q5jwwyKXN9eRh9bNmKXNZKXNZKXNZKXNZKXNZWZl7enlffn/uqVewMoeGrGrzA/PkWIzuRSvqG8A9uYY+xHm0It4/fHKan62o74FdJ6ditupgq8fq5VrDqiMPuXNbudaxasw5sOqo9eoaN9yTUzU4Vnp71rOIWVpHbqE90K6TY/E+xyytI8eqMUvryLH2pPtg153jnGPOsXp1jjnHeqSOOOTOeXsKar0ermkPx0B7GlZt153LoMN3LovA450cDGZdwcrcdViWP78hqowHdVYnAAAAAElFTkSuQmCC" />
-                                                                    </ui:ClickImage.Image>
-                                                                    <ui:ClickImage.Target>
-                                                                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
-                                                                    </ui:ClickImage.Target>
-                                                                  </ui:ClickImage>
-                                                                  <Assign sap2010:WorkflowViewState.IdRef="Assign_77">
-                                                                    <Assign.To>
-                                                                      <OutArgument x:TypeArguments="x:Boolean">[FoundSearchesImage]</OutArgument>
-                                                                    </Assign.To>
-                                                                    <Assign.Value>
-                                                                      <InArgument x:TypeArguments="x:Boolean">True</InArgument>
-                                                                    </Assign.Value>
-                                                                  </Assign>
-                                                                </Sequence>
+                                                                <Assign sap2010:WorkflowViewState.IdRef="Assign_78">
+                                                                  <Assign.To>
+                                                                    <OutArgument x:TypeArguments="x:Boolean">[FoundSearchesImage]</OutArgument>
+                                                                  </Assign.To>
+                                                                  <Assign.Value>
+                                                                    <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                                                  </Assign.Value>
+                                                                </Assign>
                                                               </ActivityAction>
                                                             </ui:WindowScope.Body>
                                                           </ui:WindowScope>
                                                         </Sequence>
-                                                      </Sequence>
-                                                    </ui:CommentOut.Body>
-                                                  </ui:CommentOut>
+                                                      </ActivityAction>
+                                                    </ui:WindowScope.Body>
+                                                  </ui:WindowScope>
+                                                  <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" Window="{x:Null}" ContinueOnError="False" DisplayName="Attach Window 'Landonlin Transpare'" sap2010:WorkflowViewState.IdRef="WindowScope_43" InformativeScreenshot="d2ae58825b478c6a30e5abf78ce5491e" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline Workspace - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]">
+                                                    <ui:WindowScope.Body>
+                                                      <ActivityAction x:TypeArguments="x:Object">
+                                                        <ActivityAction.Argument>
+                                                          <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                                        </ActivityAction.Argument>
+                                                        <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_181">
+                                                          <Sequence.Variables>
+                                                            <Variable x:TypeArguments="x:Double" Default="0.8" Name="findImageAccuracy" />
+                                                            <Variable x:TypeArguments="x:Boolean" Default="False" Name="foundImage" />
+                                                            <Variable x:TypeArguments="x:String" Default="Titles image" Name="imageDescription" />
+                                                          </Sequence.Variables>
+                                                          <ui:ClickImage DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOUBLE" ContinueOnError="True" DisplayName="Click the menu to ensure it has loaded  (Sch B)" sap2010:WorkflowViewState.IdRef="ClickImage_31" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+                                                            <ui:ClickImage.CursorPosition>
+                                                              <ui:CursorPosition OffsetX="0" OffsetY="0" Position="Center" />
+                                                            </ui:ClickImage.CursorPosition>
+                                                            <ui:ClickImage.Image>
+                                                              <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAADsAAAA3CAYAAACy5zLIAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFdSURBVGhD7ZMxbsQwDASvTJkv3BPyppQpr8wXUuYbeaMDFQts9khJoenCMgdYSKToOw1g37YLUbKrUrKrcqjs7fXtTyxmZrI4XPbz66crMjOTRclmAYGeyMxMFofIqoBmdiabkt0LLszfImd2Jpt0Wevi0WRTshH4kt6r2frvj++nHtdWsijZCHy5knVyetlRIvMZlGwEXMx7LXtgJvLsfyjZCLjYpWS99LDmOVmU7KqU7KqU7KqU7KqU7Kq4si/3j9NHKdlG70E9y07WfyhTsqM6O1m/r4Rkj07W/ykpssyoD0Yz1iz3Glbf6oHd3+yo1j5W3XMNrD56Xl/3zLQsh88tvDPrWew52kdtoTMcJUWWz7w+aqy652gfNVYveq6Evlmuec811l6f91xjjfR1z+z+ZntnCnreDPd0hvdAZxpWD4Re47NEKdmG9fDZopTsqpTsqpTsqlxIdtt+Af6ON0xcwX/yAAAAAElFTkSuQmCC" />
+                                                            </ui:ClickImage.Image>
+                                                            <ui:ClickImage.Target>
+                                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                            </ui:ClickImage.Target>
+                                                          </ui:ClickImage>
+                                                          <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" Window="{x:Null}" ContinueOnError="True" DisplayName="Attach Window 'Landonlin Transpare'" sap2010:WorkflowViewState.IdRef="WindowScope_47" InformativeScreenshot="de7756c94be24ff06208705fc4a951f5" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline - Searches - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS]">
+                                                            <ui:WindowScope.Body>
+                                                              <ActivityAction x:TypeArguments="x:Object">
+                                                                <ActivityAction.Argument>
+                                                                  <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                                                </ActivityAction.Argument>
+                                                                <Assign sap2010:WorkflowViewState.IdRef="Assign_86">
+                                                                  <Assign.To>
+                                                                    <OutArgument x:TypeArguments="x:Boolean">[FoundSearchesImage]</OutArgument>
+                                                                  </Assign.To>
+                                                                  <Assign.Value>
+                                                                    <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                                                  </Assign.Value>
+                                                                </Assign>
+                                                              </ActivityAction>
+                                                            </ui:WindowScope.Body>
+                                                          </ui:WindowScope>
+                                                        </Sequence>
+                                                      </ActivityAction>
+                                                    </ui:WindowScope.Body>
+                                                  </ui:WindowScope>
                                                 </Parallel>
                                               </Sequence>
                                             </Sequence>
                                           </ActivityAction>
                                         </ui:WindowScope.Body>
                                       </ui:WindowScope>
+                                      <Sequence DisplayName="Save screenshot of active window" sap2010:WorkflowViewState.IdRef="Sequence_1">
+                                        <Sequence.Variables>
+                                          <Variable x:TypeArguments="ui:Image" Name="image" />
+                                          <Variable x:TypeArguments="ui:Window" Name="activeWindow" />
+                                        </Sequence.Variables>
+                                        <ui:GetActiveWindow ApplicationWindow="[activeWindow]" ContinueOnError="True" DisplayName="Get active window" sap2010:WorkflowViewState.IdRef="GetActiveWindow_1">
+                                          <ui:GetActiveWindow.Body>
+                                            <ActivityAction x:TypeArguments="x:Object">
+                                              <ActivityAction.Argument>
+                                                <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                              </ActivityAction.Argument>
+                                              <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_2">
+                                                <ui:TakeScreenshot WaitBefore="{x:Null}" DisplayName="Take screenshot" sap2010:WorkflowViewState.IdRef="TakeScreenshot_1" Screenshot="[image]">
+                                                  <ui:TakeScreenshot.Target>
+                                                    <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[activeWindow]" TimeoutMS="[DefaultTimeoutMS]" WaitForReady="INTERACTIVE" />
+                                                  </ui:TakeScreenshot.Target>
+                                                </ui:TakeScreenshot>
+                                                <ui:SaveImage DisplayName="Save image" FileName="[SavedScreenShotDirectory + imageName.ToString() + &quot;.png&quot;]" sap2010:WorkflowViewState.IdRef="SaveImage_1" Image="[image]" />
+                                                <Assign DisplayName="++imageName" sap2010:WorkflowViewState.IdRef="Assign_1">
+                                                  <Assign.To>
+                                                    <OutArgument x:TypeArguments="x:Int32">[imageName]</OutArgument>
+                                                  </Assign.To>
+                                                  <Assign.Value>
+                                                    <InArgument x:TypeArguments="x:Int32">[imageName+1]</InArgument>
+                                                  </Assign.Value>
+                                                </Assign>
+                                              </Sequence>
+                                            </ActivityAction>
+                                          </ui:GetActiveWindow.Body>
+                                        </ui:GetActiveWindow>
+                                      </Sequence>
                                     </Sequence>
                                     <FlowStep.Next>
                                       <FlowDecision x:Name="__ReferenceID4" Condition="[FoundSearchesImage]" DisplayName="FoundSearchesImage" sap2010:WorkflowViewState.IdRef="FlowDecision_6" True="{x:Reference __ReferenceID1}" False="{x:Reference __ReferenceID0}" />
@@ -919,7 +1239,18 @@
         </ui:WindowScope>
       </Sequence>
     </FlowStep>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <FlowStep sap2010:WorkflowViewState.IdRef="FlowStep_35">
+      <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" Window="{x:Null}" ContinueOnError="True" DisplayName="Attach Window 'Landonlin Transpare'" sap2010:WorkflowViewState.IdRef="WindowScope_45" InformativeScreenshot="de7756c94be24ff06208705fc4a951f5" Selector="&lt;wnd app='wfica32.exe' cls='Transparent Windows Client' title='Landonline - Searches - \\Remote' /&gt;" TimeoutMS="[DefaultTimeoutMS + InitialTimeoutMS]">
+        <ui:WindowScope.Body>
+          <ActivityAction x:TypeArguments="x:Object">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+            </ActivityAction.Argument>
+          </ActivityAction>
+        </ui:WindowScope.Body>
+      </ui:WindowScope>
+    </FlowStep>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Flowchart>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -993,6 +1324,16 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TakeScreenshot_1" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_1" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1112,626">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ClickImage_25" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Assign_72" sap:VirtualizedContainerService.HintSize="314,60" />
       <sap2010:ViewStateData Id="Sequence_166" sap:VirtualizedContainerService.HintSize="336,330">
@@ -1028,16 +1369,26 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_162" sap:VirtualizedContainerService.HintSize="1246,624">
+      <sap2010:ViewStateData Id="Sequence_162" sap:VirtualizedContainerService.HintSize="1246,715">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_2" sap:VirtualizedContainerService.HintSize="1260,770" />
+      <sap2010:ViewStateData Id="WindowScope_2" sap:VirtualizedContainerService.HintSize="1260,861" />
       <sap2010:ViewStateData Id="Assign_79" sap:VirtualizedContainerService.HintSize="1260,60" />
       <sap2010:ViewStateData Id="Sequence_16" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TakeScreenshot_2" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_2" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_81" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_189" sap:VirtualizedContainerService.HintSize="416,424">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1053,14 +1404,14 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="CommentOut_9" sap:VirtualizedContainerService.HintSize="416,308" />
-      <sap2010:ViewStateData Id="Sequence_142" sap:VirtualizedContainerService.HintSize="438,432">
+      <sap2010:ViewStateData Id="Sequence_142" sap:VirtualizedContainerService.HintSize="438,896">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_39" sap:VirtualizedContainerService.HintSize="645,578">
+      <sap2010:ViewStateData Id="WindowScope_39" sap:VirtualizedContainerService.HintSize="645,1042">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1095,6 +1446,17 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TakeScreenshot_3" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_3" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_82" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_190" sap:VirtualizedContainerService.HintSize="561,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="TypeInto_6" sap:VirtualizedContainerService.HintSize="561,96">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -1112,10 +1474,10 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="While_9" sap:VirtualizedContainerService.HintSize="561,497">
+      <sap2010:ViewStateData Id="While_9" sap:VirtualizedContainerService.HintSize="561,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
@@ -1129,10 +1491,21 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="While_10" sap:VirtualizedContainerService.HintSize="561,497">
+      <sap2010:ViewStateData Id="While_10" sap:VirtualizedContainerService.HintSize="561,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TakeScreenshot_4" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_4" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_83" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_191" sap:VirtualizedContainerService.HintSize="561,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
@@ -1145,18 +1518,25 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Assign_39" sap:VirtualizedContainerService.HintSize="314,60" />
-      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="AddToCollection`1_11" sap:VirtualizedContainerService.HintSize="314,22" />
-      <sap2010:ViewStateData Id="Sequence_80" sap:VirtualizedContainerService.HintSize="336,392">
+      <sap2010:ViewStateData Id="Sequence_192" sap:VirtualizedContainerService.HintSize="314,264">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_18" sap:VirtualizedContainerService.HintSize="414,538" />
-      <sap2010:ViewStateData Id="Sequence_81" sap:VirtualizedContainerService.HintSize="436,662">
+      <sap2010:ViewStateData Id="Assign_39" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="AddToCollection`1_11" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_80" sap:VirtualizedContainerService.HintSize="336,696">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_18" sap:VirtualizedContainerService.HintSize="414,842" />
+      <sap2010:ViewStateData Id="Sequence_81" sap:VirtualizedContainerService.HintSize="436,966">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1164,10 +1544,11 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_82" sap:VirtualizedContainerService.HintSize="561,980">
+      <sap2010:ViewStateData Id="Sequence_82" sap:VirtualizedContainerService.HintSize="561,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
@@ -1181,10 +1562,10 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_84" sap:VirtualizedContainerService.HintSize="414,541">
+      <sap2010:ViewStateData Id="Sequence_84" sap:VirtualizedContainerService.HintSize="414,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
@@ -1198,53 +1579,41 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="SendHotkey_66" sap:VirtualizedContainerService.HintSize="414,116" />
       <sap2010:ViewStateData Id="SendHotkey_67" sap:VirtualizedContainerService.HintSize="414,116" />
-      <sap2010:ViewStateData Id="ClickImage_12" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="SendHotkey_68" sap:VirtualizedContainerService.HintSize="314,116" />
-      <sap2010:ViewStateData Id="SendHotkey_69" sap:VirtualizedContainerService.HintSize="314,116" />
-      <sap2010:ViewStateData Id="TypeInto_11" sap:VirtualizedContainerService.HintSize="314,96" />
-      <sap2010:ViewStateData Id="Assign_59" sap:VirtualizedContainerService.HintSize="314,60" />
-      <sap2010:ViewStateData Id="TypeInto_12" sap:VirtualizedContainerService.HintSize="314,96" />
-      <sap2010:ViewStateData Id="AddToCollection`1_8" sap:VirtualizedContainerService.HintSize="314,22" />
-      <sap2010:ViewStateData Id="Sequence_136" sap:VirtualizedContainerService.HintSize="336,976">
+      <sap2010:ViewStateData Id="TakeScreenshot_5" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_5" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_84" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_193" sap:VirtualizedContainerService.HintSize="336,424">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_33" sap:VirtualizedContainerService.HintSize="414,1122">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ClickImage_13" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Sequence_137" sap:VirtualizedContainerService.HintSize="336,230">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_34" sap:VirtualizedContainerService.HintSize="414,376">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_10" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Sequence_138" sap:VirtualizedContainerService.HintSize="336,230">
+      <sap2010:ViewStateData Id="ClickImage_12" sap:VirtualizedContainerService.HintSize="336,106" />
+      <sap2010:ViewStateData Id="SendHotkey_68" sap:VirtualizedContainerService.HintSize="336,116" />
+      <sap2010:ViewStateData Id="SendHotkey_69" sap:VirtualizedContainerService.HintSize="336,116" />
+      <sap2010:ViewStateData Id="TypeInto_11" sap:VirtualizedContainerService.HintSize="336,96" />
+      <sap2010:ViewStateData Id="Assign_59" sap:VirtualizedContainerService.HintSize="336,60" />
+      <sap2010:ViewStateData Id="TypeInto_12" sap:VirtualizedContainerService.HintSize="336,96" />
+      <sap2010:ViewStateData Id="AddToCollection`1_8" sap:VirtualizedContainerService.HintSize="336,22" />
+      <sap2010:ViewStateData Id="TakeScreenshot_6" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_7" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_87" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_194" sap:VirtualizedContainerService.HintSize="336,424">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_35" sap:VirtualizedContainerService.HintSize="414,376">
+      <sap2010:ViewStateData Id="Sequence_136" sap:VirtualizedContainerService.HintSize="358,1904">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_33" sap:VirtualizedContainerService.HintSize="414,2050">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1252,31 +1621,25 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SendHotkey_70" sap:VirtualizedContainerService.HintSize="314,116" />
-      <sap2010:ViewStateData Id="Sequence_139" sap:VirtualizedContainerService.HintSize="336,240">
+      <sap2010:ViewStateData Id="TakeScreenshot_8" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_8" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_88" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_196" sap:VirtualizedContainerService.HintSize="336,424">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_36" sap:VirtualizedContainerService.HintSize="414,386">
+      <sap2010:ViewStateData Id="ClickImage_13" sap:VirtualizedContainerService.HintSize="336,106" />
+      <sap2010:ViewStateData Id="Sequence_137" sap:VirtualizedContainerService.HintSize="358,694">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_88" sap:VirtualizedContainerService.HintSize="436,3536">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="561,3683">
+      <sap2010:ViewStateData Id="WindowScope_34" sap:VirtualizedContainerService.HintSize="414,840">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1284,22 +1647,25 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ClickImage_16" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Sequence_188" sap:VirtualizedContainerService.HintSize="314,99">
+      <sap2010:ViewStateData Id="TakeScreenshot_9" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_9" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_89" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_197" sap:VirtualizedContainerService.HintSize="336,424">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_140" sap:VirtualizedContainerService.HintSize="336,369">
+      <sap2010:ViewStateData Id="Click_10" sap:VirtualizedContainerService.HintSize="336,106" />
+      <sap2010:ViewStateData Id="Sequence_138" sap:VirtualizedContainerService.HintSize="358,694">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_37" sap:VirtualizedContainerService.HintSize="561,515">
+      <sap2010:ViewStateData Id="WindowScope_35" sap:VirtualizedContainerService.HintSize="414,840">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1307,14 +1673,89 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_90" sap:VirtualizedContainerService.HintSize="583,6592">
+      <sap2010:ViewStateData Id="TakeScreenshot_10" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_10" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_90" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_198" sap:VirtualizedContainerService.HintSize="336,424">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_20" sap:VirtualizedContainerService.HintSize="597,6738">
+      <sap2010:ViewStateData Id="SendHotkey_70" sap:VirtualizedContainerService.HintSize="336,116" />
+      <sap2010:ViewStateData Id="Sequence_139" sap:VirtualizedContainerService.HintSize="358,704">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_36" sap:VirtualizedContainerService.HintSize="414,850">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_88" sap:VirtualizedContainerService.HintSize="436,5366">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="561,5513">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TakeScreenshot_11" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_11" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_91" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_199" sap:VirtualizedContainerService.HintSize="336,424">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ClickImage_16" sap:VirtualizedContainerService.HintSize="336,106" />
+      <sap2010:ViewStateData Id="Sequence_188" sap:VirtualizedContainerService.HintSize="336,99">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_140" sap:VirtualizedContainerService.HintSize="358,833">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_37" sap:VirtualizedContainerService.HintSize="561,979">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_90" sap:VirtualizedContainerService.HintSize="583,7247">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_20" sap:VirtualizedContainerService.HintSize="597,7393">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1331,7 +1772,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_91" sap:VirtualizedContainerService.HintSize="619,7617">
+      <sap2010:ViewStateData Id="Sequence_91" sap:VirtualizedContainerService.HintSize="619,8272">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1339,7 +1780,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="While_8" sap:VirtualizedContainerService.HintSize="645,7775">
+      <sap2010:ViewStateData Id="While_8" sap:VirtualizedContainerService.HintSize="645,8430">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1356,28 +1797,46 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_60" sap:VirtualizedContainerService.HintSize="667,8908">
+      <sap2010:ViewStateData Id="Sequence_60" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SendHotkey_75" sap:VirtualizedContainerService.HintSize="314,116">
+      <sap2010:ViewStateData Id="TakeScreenshot_12" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_12" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_92" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_201" sap:VirtualizedContainerService.HintSize="438,424">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_151" sap:VirtualizedContainerService.HintSize="336,240">
+      <sap2010:ViewStateData Id="SendHotkey_75" sap:VirtualizedContainerService.HintSize="438,116">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_41" sap:VirtualizedContainerService.HintSize="414,386">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,424">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetActiveWindow_1" sap:VirtualizedContainerService.HintSize="416,502" />
+      <sap2010:ViewStateData Id="Sequence_151" sap:VirtualizedContainerService.HintSize="460,1370">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_41" sap:VirtualizedContainerService.HintSize="474,1516">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1426,65 +1885,55 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ClickImage_29" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Assign_78" sap:VirtualizedContainerService.HintSize="314,60" />
-      <sap2010:ViewStateData Id="Sequence_180" sap:VirtualizedContainerService.HintSize="336,330">
+      <sap2010:ViewStateData Id="TakeScreenshot_7" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="SaveImage_6" sap:VirtualizedContainerService.HintSize="314,92" />
+      <sap2010:ViewStateData Id="Assign_85" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_195" sap:VirtualizedContainerService.HintSize="1076,424">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_42" sap:VirtualizedContainerService.HintSize="414,476" />
-      <sap2010:ViewStateData Id="Sequence_169" sap:VirtualizedContainerService.HintSize="436,802">
+      <sap2010:ViewStateData Id="ClickImage_29" sap:VirtualizedContainerService.HintSize="414,106" />
+      <sap2010:ViewStateData Id="Assign_78" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="WindowScope_46" sap:VirtualizedContainerService.HintSize="414,206" />
+      <sap2010:ViewStateData Id="Sequence_180" sap:VirtualizedContainerService.HintSize="436,476">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ClickImage_31" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Assign_77" sap:VirtualizedContainerService.HintSize="314,60" />
-      <sap2010:ViewStateData Id="Sequence_181" sap:VirtualizedContainerService.HintSize="336,330">
+      <sap2010:ViewStateData Id="WindowScope_42" sap:VirtualizedContainerService.HintSize="450,622" />
+      <sap2010:ViewStateData Id="ClickImage_31" sap:VirtualizedContainerService.HintSize="414,106" />
+      <sap2010:ViewStateData Id="Assign_86" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="WindowScope_47" sap:VirtualizedContainerService.HintSize="414,206" />
+      <sap2010:ViewStateData Id="Sequence_181" sap:VirtualizedContainerService.HintSize="436,476">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_43" sap:VirtualizedContainerService.HintSize="414,476" />
-      <sap2010:ViewStateData Id="Sequence_171" sap:VirtualizedContainerService.HintSize="436,600">
+      <sap2010:ViewStateData Id="WindowScope_43" sap:VirtualizedContainerService.HintSize="450,622" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1054,668" />
+      <sap2010:ViewStateData Id="Sequence_172" sap:VirtualizedContainerService.HintSize="1076,792">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_175" sap:VirtualizedContainerService.HintSize="458,724">
+      <sap2010:ViewStateData Id="Sequence_173" sap:VirtualizedContainerService.HintSize="1098,1380">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_10" sap:VirtualizedContainerService.HintSize="474,802" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1064,848" />
-      <sap2010:ViewStateData Id="Sequence_172" sap:VirtualizedContainerService.HintSize="1086,972">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_173" sap:VirtualizedContainerService.HintSize="1108,1096">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_1" sap:VirtualizedContainerService.HintSize="1122,1242" />
-      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="WindowScope_1" sap:VirtualizedContainerService.HintSize="1112,1526" />
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="1134,2316">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1607,6 +2056,15 @@
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <av:Point x:Key="ShapeLocation">179,860</av:Point>
+            <av:Size x:Key="ShapeSize">200,51</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WindowScope_45" sap:VirtualizedContainerService.HintSize="200,51" />
+      <sap2010:ViewStateData Id="FlowStep_35">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">150,1114.5</av:Point>
             <av:Size x:Key="ShapeSize">200,51</av:Size>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>

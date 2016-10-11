@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using UiAutomation.Logic.Workflows;
+using UiAutomation.Contract.Models;
 
 namespace UiAutomation.Logic.RequestsResponses
 {
@@ -80,6 +81,25 @@ namespace UiAutomation.Logic.RequestsResponses
             if (copyToTarget is WorkflowSearchResponse && copyFromSource.Output.ContainsKey("OrderIds"))
             {
                 ((WorkflowSearchResponse)copyToTarget).OrderIds = JsonConvert.DeserializeObject<string[]>(copyFromSource.Output["OrderIds"].ToString(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None });
+            }
+        }
+    }
+
+    public class SearchResults
+    {
+        public string OrderId { get; set; }
+        public List<SearchResult> Results { get; set; }
+
+        public SearchResults(KeyValuePair<string, string> data)
+        {
+            OrderId = data.Key;
+            Results = new List<SearchResult>();
+
+            // All lines in data.Value (excluding the first line, which is always the header)
+            var lines = data.Value.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Skip(1);
+            foreach (var line in lines)
+            {
+                Results.Add(new SearchResult(line));
             }
         }
     }

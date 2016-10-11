@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -47,10 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Automation\ICitrixAutomator.cs" />
+    <Compile Include="Automation\ILandOnline.cs" />
     <Compile Include="Automation\Landonline.cs" />
+    <Compile Include="Automation\ProcessHelper.cs" />
     <Compile Include="Automation\RobotWorker.cs" />
     <Compile Include="Automation\Threading.cs" />
     <Compile Include="Automation\UiPath\RobotClient.cs" />
+    <Compile Include="CitrixAutomator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestsResponses\IWorkflowMessage.cs" />
     <Compile Include="RequestsResponses\WorkflowRequest.cs" />
@@ -73,7 +78,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Service References\UiPathRemote\Message.xsd">
       <SubType>Designer</SubType>
@@ -100,6 +107,15 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UiAutomation.Contract\UiAutomation.Contract.csproj">
+      <Project>{a9a4e893-d988-42a9-808f-1c2a64943c79}</Project>
+      <Name>UiAutomation.Contract</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,10 @@
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Release\UiAutomation.Logic.dll.config
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Release\UiAutomation.Logic.dll
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Release\UiAutomation.Logic.pdb
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Release\Newtonsoft.Json.dll
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Release\UiAutomation.Contract.dll
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Release\UiAutomation.Contract.pdb
+C:\Git\UiAutomation\UiAutomation.Logic\bin\Release\Newtonsoft.Json.xml
+C:\Git\UiAutomation\UiAutomation.Logic\obj\Release\UiAutomation.Logic.csprojResolveAssemblyReference.cache
+C:\Git\UiAutomation\UiAutomation.Logic\obj\Release\UiAutomation.Logic.dll
+C:\Git\UiAutomation\UiAutomation.Logic\obj\Release\UiAutomation.Logic.pdb

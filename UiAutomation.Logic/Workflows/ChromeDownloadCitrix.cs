@@ -6,7 +6,7 @@ namespace UiAutomation.Logic.Workflows
     {
         public static string CitrixPassword = "5Vc-1Dm5";
 
-        public DownloadCitrixRequest(int? initialTimeoutMS = null) : base(initialTimeoutMS) { }
+        public DownloadCitrixRequest(string screenshotBaseDirectory, string screenshotProcessSubDirectory, int? initialTimeoutMS = null) : base(screenshotBaseDirectory, screenshotProcessSubDirectory, WorkflowType.ChromeDownloadCitrix.ToString(), initialTimeoutMS) { }
     }
 
     public class ChromeDownloadCitrixWorkflow : RobotWorkflowBase<DownloadCitrixRequest, WorkflowResponse>

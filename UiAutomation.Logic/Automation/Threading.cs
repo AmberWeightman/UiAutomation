@@ -34,34 +34,7 @@ namespace UiAutomation.Logic.Automation
         // UiRobot has memory inefficiencies. We can't rely on it to clear its own memory
         private static void KillRobots()
         {
-            var processes = Process.GetProcessesByName("UiRobot");
-
-            try
-            {    
-                foreach (Process proc in processes)
-                {
-                    proc.Close();
-                    proc.Kill();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            // Loop until termination of processes has succeeded (or one minute has passed)
-            var i = 0;
-            var processesStillRunning = true;
-            while (processesStillRunning && i++ < 60)
-            {
-                // If any of the processes now running as "UiRobot" are the same ones we tried to kill earlier, keep trying
-                var processes2 = Process.GetProcessesByName("UiRobot");
-                if (!processes2.Any(a => processes.Any(b => b == a)))
-                {
-                    processesStillRunning = false;
-                }
-                Thread.Sleep(1000);
-            }
+            ProcessHelper.EndProcessesByName(new string[] { "UiRobot" }, ProcessHelper.CloseProcessType.Kill, tryCloseSafely: false);
         }
 
     }

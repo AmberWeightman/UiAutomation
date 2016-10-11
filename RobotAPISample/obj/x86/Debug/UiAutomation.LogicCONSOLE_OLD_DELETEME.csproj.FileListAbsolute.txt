@@ -1,4 +1,10 @@
 C:\Git\UiAutomation\RobotAPISample\bin\x86\Debug\RobotAPISample.exe.config
+C:\Git\UiAutomation\RobotAPISample\bin\x86\Debug\RobotAPISample.exe
+C:\Git\UiAutomation\RobotAPISample\bin\x86\Debug\RobotAPISample.pdb
+C:\Git\UiAutomation\RobotAPISample\bin\x86\Debug\Newtonsoft.Json.dll
+C:\Git\UiAutomation\RobotAPISample\bin\x86\Debug\Newtonsoft.Json.xml
+C:\Git\UiAutomation\RobotAPISample\bin\x86\Debug\Interop.WFICALib.dll
+C:\Git\UiAutomation\RobotAPISample\obj\x86\Debug\UiAutomation.LogicCONSOLE_OLD_DELETEME.csprojResolveAssemblyReference.cache
 C:\Git\UiAutomation\RobotAPISample\obj\x86\Debug\Interop.WFICALib.dll
 C:\Git\UiAutomation\RobotAPISample\obj\x86\Debug\UiAutomation.LogicCONSOLE_OLD_DELETEME.csproj.ResolveComReference.cache
 C:\Git\UiAutomation\RobotAPISample\obj\x86\Debug\RobotAPISample.exe

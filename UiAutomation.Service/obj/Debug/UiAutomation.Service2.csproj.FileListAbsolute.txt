@@ -1,0 +1,14 @@
+C:\Git\UiAutomation\Ldm.Manual.Service\obj\Debug\UiAutomation.Service2.csprojResolveAssemblyReference.cache
+C:\Git\UiAutomation\Ldm.Manual.Service\obj\Debug\Ldm.Manual.Service.dll
+C:\Git\UiAutomation\Ldm.Manual.Service\obj\Debug\Ldm.Manual.Service.pdb
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\UiAutomation.Service2.nuspec
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\web.token.config
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\Ldm.Manual.Service.dll.config
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\Ldm.Manual.Service.dll
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\Ldm.Manual.Service.pdb
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\Ninject.dll
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\UiAutomation.Logic.dll
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\Newtonsoft.Json.dll
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\UiAutomation.Logic.pdb
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\Ninject.xml
+C:\Git\UiAutomation\Ldm.Manual.Service\bin\Newtonsoft.Json.xml

@@ -1,0 +1,5 @@
+C:\Git\UiAutomation\UiAutomation.Contract\bin\Release\UiAutomation.Contract.dll
+C:\Git\UiAutomation\UiAutomation.Contract\bin\Release\UiAutomation.Contract.pdb
+C:\Git\UiAutomation\UiAutomation.Contract\obj\Release\UiAutomation.Contract.csprojResolveAssemblyReference.cache
+C:\Git\UiAutomation\UiAutomation.Contract\obj\Release\UiAutomation.Contract.dll
+C:\Git\UiAutomation\UiAutomation.Contract\obj\Release\UiAutomation.Contract.pdb

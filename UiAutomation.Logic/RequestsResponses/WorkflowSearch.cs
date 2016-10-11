@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace UiAutomation.Logic.RequestsResponses
@@ -8,7 +7,11 @@ namespace UiAutomation.Logic.RequestsResponses
     {
         public string[] OrderIds { get; set; }
         
-        public const string OutputDirectory = @"C:\LandonlineOutputDirectory\";
+        protected internal const string _defaultOutputDirectory = @"\\MT-SCHFILE01-L\PencilAttachments\NZ\Landonline\";
+        
+        //public string[] OutputDirectories { get; set; }
+
+        public WorkflowSearchRequest(string screenshotBaseDirectory, string screenshotProcessSubDirectory, string screenshotWorkflowSubDirectory) : base(screenshotBaseDirectory, screenshotProcessSubDirectory, screenshotWorkflowSubDirectory) { }
 
         public override bool Validate()
         {

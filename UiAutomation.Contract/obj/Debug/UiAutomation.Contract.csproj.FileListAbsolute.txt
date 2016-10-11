@@ -1,0 +1,4 @@
+C:\Git\UiAutomation\UiAutomation.Contract\bin\Debug\UiAutomation.Contract.dll
+C:\Git\UiAutomation\UiAutomation.Contract\bin\Debug\UiAutomation.Contract.pdb
+C:\Git\UiAutomation\UiAutomation.Contract\obj\Debug\UiAutomation.Contract.dll
+C:\Git\UiAutomation\UiAutomation.Contract\obj\Debug\UiAutomation.Contract.pdb
